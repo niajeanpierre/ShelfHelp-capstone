@@ -1,37 +1,46 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import React, { useEffect } from "react";
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    useLocation,
+} from "react-router-dom";
+import Landing from "./pages/landing/landing";
+import Shelf from "./pages/bookshelf/shelf";
+import TBR from "./pages/tbr/tbr";
+import Navigation from "./components/Navigation";
+import Search from "./pages/search/search";
 import "./App.css";
-import Header from "./components/Header";
+
+function UseLocationEffect() {
+    const location = useLocation();
+
+    useEffect(() => {
+        const isLandingPage = location.pathname === "/";
+
+        const display = document.querySelector(".display");
+        display.classList.toggle("landing-background", isLandingPage);
+    }, [location]);
+
+    return null; // toggles between two alternating background images- hook instead?
+}
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <>
-      <Header />
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  );
+    return (
+        <Router>
+            <div className="App">
+                <UseLocationEffect />
+                <Navigation />
+                <Routes>
+                    <Route path="/" exact element={<Landing />} />
+                    <Route path="/shelf" element={<Shelf />} />
+                    <Route path="/tbr" element={<TBR />} />
+                    <Route path="/search" element={<Search />} />
+                    <Route path="/search/:query" element={<Search />} />
+                </Routes>
+            </div>
+        </Router>
+    );
 }
 
 export default App;
