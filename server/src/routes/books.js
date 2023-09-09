@@ -20,14 +20,9 @@ router.post('/:bookid', async (req, res, next) => {
             notes: notes,
         })
 
-        let bookcheck = Book.findOne({bookid: bookid})
-
-        if (bookcheck) {
-            res.send("Book already exists")
-        } else {
         const savedBook = await book.save()
         res.json(savedBook.toJSON())
-        }
+
     }) 
 
     router.get('/:bookid', async (req, res, next) => {
