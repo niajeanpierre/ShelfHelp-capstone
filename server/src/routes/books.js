@@ -20,20 +20,27 @@ router.post('/:bookid', async (req, res, next) => {
             notes: notes,
         })
 
-        const savedBook = await book.save()
-        res.json(savedBook.toJSON())
+        try {
+            const savedBook = await book.save()
+            res.json(savedBook.toJSON())
+        } catch (err) {
+            return res.status(422).json({ error: err })
+        }
 
     }) 
 
     router.get('/:bookid', async (req, res, next) => {
         const { bookid } = req.params
 
-        const book = await Book.findOne({bookid: bookid})
-        if (book){
-            res.json(book.toJSON()).end()
-        }else {
-            res.send("Can not find book")
-        }
+        try {
+            const book = await Book.findOne({bookid: bookid})
+            if (book){
+                res.json(book.toJSON()).end()
+            } else {
+                res.send("Can not find book")
+            }} catch (err) {
+                return res.status(422).json({ error: err })
+            }
     })
 
 module.exports = router
