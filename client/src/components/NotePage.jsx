@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import './NotePage.css'; 
 const NotePage = () => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState('');
@@ -59,7 +59,8 @@ const NotePage = () => {
   };
 
   return (
-    <div className="note-page">
+    <div className="note-page-container">
+      <div className="note-page">
       <h1>Notes</h1>
       <div className="book-section">
         <input
@@ -116,6 +117,7 @@ const NotePage = () => {
       <button className="publish-button" onClick={publish}>
         Publish
       </button>
+    </div>
     </div>
   );
 };
