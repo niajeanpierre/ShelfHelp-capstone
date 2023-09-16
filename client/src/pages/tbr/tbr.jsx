@@ -1,6 +1,6 @@
 import React from "react";
 import cover from "../../images/cover.png";
-import BookDisplay from "../../components/BookDisplay";
+import BookDisplay from "../../components/ShelfDisplay";
 
 
 const TBR = () => {

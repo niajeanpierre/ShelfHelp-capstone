@@ -11,6 +11,7 @@ import TBR from "./pages/tbr/tbr";
 import Navigation from "./components/Navigation";
 import Search from "./pages/search/search";
 import "./App.css";
+import NotePage from "./pages/note/NotePage";
 
 function UseLocationEffect() {
     const location = useLocation();
@@ -22,7 +23,7 @@ function UseLocationEffect() {
         display.classList.toggle("landing-background", isLandingPage);
     }, [location]);
 
-    return null; // toggles between two alternating background images- hook instead?
+    return null;
 }
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
                     <Route path="/tbr" element={<TBR />} />
                     <Route path="/search" element={<Search />} />
                     <Route path="/search/:query" element={<Search />} />
+                    <Route path="/note/:title" element={<NotePage />} />
                 </Routes>
             </div>
         </Router>

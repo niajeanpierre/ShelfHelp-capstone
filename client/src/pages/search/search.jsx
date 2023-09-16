@@ -4,6 +4,8 @@ import cover from "../../images/cover.png";
 import "./search.css";
 import { Form, FormControl, Button } from "react-bootstrap";
 import axios from "axios";
+
+
 const Search = () => {
   const navigate = useNavigate();
   const { query } = useParams();
@@ -12,55 +14,6 @@ const Search = () => {
   const [filteredBooks, setFilteredBooks] = useState();
 
   console.log(query);
-
-  const books = [
-    {
-      title: "Harry Potter and the Philosopher's stone",
-      author: "JK Rowling",
-      cover: cover,
-      category: "read",
-    },
-    {
-      title: "Harry Potter and the Chamber of Secrets",
-      author: "JK Rowling",
-      cover: cover,
-      category: "read",
-    },
-    {
-      title: "Harry Potter and the Prisoner of Azkaban",
-      author: "JK Rowling",
-      cover: cover,
-      category: "read",
-    },
-    {
-      title: "Harry Potter and the Goblet of Fire",
-      author: "JK Rowling",
-      cover: cover,
-      category: "read",
-    },
-    {
-      title: "Harry Potter and the Order of the Phoenix",
-      author: "JK Rowling",
-      cover: cover,
-      category: "read",
-    },
-    {
-      title: "Harry Potter and the Half-Blood Prince",
-      author: "JK Rowling",
-      cover: cover,
-      category: "read",
-    },
-    {
-      title: "Harry Potter and the Deathly Hallows",
-      author: "JK Rowling",
-      cover: cover,
-      category: "reading",
-    },
-  ];
-
-  const filter = books.filter((book) =>
-    book[radioOption].toLowerCase().includes(search.toLowerCase())
-  );
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -86,7 +39,6 @@ const Search = () => {
       setSearch(query);
     }
   }, [query]);
-  console.log(filter);
   return (
     <section className="display">
       <h1>Search</h1>
@@ -117,7 +69,7 @@ const Search = () => {
 
       <div>
         {filteredBooks
-          ? filteredBooks.map((book, index) => (
+          && filteredBooks.map((book, index) => (
               <div key={index}>
                 <h4>
                   {book.title} || Author:{book.author_name}
@@ -126,14 +78,6 @@ const Search = () => {
                   src={`https://covers.openlibrary.org/b/id/${book.cover_i}-S.jpg`}
                   alt={`Cover for ${book.title}`}
                 />
-              </div>
-            ))
-          : filter.map((book, index) => (
-              <div key={index}>
-                <h4>
-                  {book.title} || Author:{book.author}
-                </h4>
-                {/* <img src={book.cover} alt={`Cover for ${book.title}`} /> */}
               </div>
             ))}
       </div>
