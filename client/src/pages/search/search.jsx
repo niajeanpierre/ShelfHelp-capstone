@@ -4,14 +4,15 @@ import cover from "../../images/cover.png";
 import "./search.css";
 import { Form, FormControl, Button } from "react-bootstrap";
 import axios from "axios";
+import LoadingSpinner from "../../components/loadingSpinner/loadingspinner";
 const Search = () => {
   const navigate = useNavigate();
   const { query } = useParams();
-  const [radioOption, setRadioOption] = useState("title");
+  const [radioOption, setRadioOption] = useState("");
+  const [bothChecked, setBothChecked] = useState(true);
   const [search, setSearch] = useState("");
   const [filteredBooks, setFilteredBooks] = useState();
-
-  console.log(query);
+  const [isLoading, setIsLoading] = useState(false);
 
   const books = [
     {
@@ -59,43 +60,86 @@ const Search = () => {
   ];
 
   const filter = books.filter((book) =>
-    book[radioOption].toLowerCase().includes(search.toLowerCase())
+    book.title.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleSearch = (e) => {
-    e.preventDefault();
+  const searchForBoth = () => {
+    setIsLoading(true);
+    console.log(`searching for both is: ${bothChecked}: ${search}`);
     axios
-      .get(`https://openlibrary.org/search.json?${radioOption}=${search}`)
+      .get(`https://openlibrary.org/search.json?q=${search}`)
       .then((response) => {
         // Handle the API response here
         console.log("API Response:", response.data);
-        setFilteredBooks(response.data.docs);
+        let hasImage = response.data.docs.filter((book) =>
+          book.hasOwnProperty("cover_i")
+        );
+
+        setFilteredBooks(hasImage);
+        setIsLoading(false);
       })
       .catch((error) => {
         // Handle errors here
         console.error("API Error:", error);
       });
   };
+  const searchForRadioOption = () => {
+    setIsLoading(true);
+
+    console.log(`searching for ${radioOption}: ${search}`);
+    axios
+      .get(`https://openlibrary.org/search.json?${radioOption}=${search}`)
+      .then((response) => {
+        // Handle the API response here
+        console.log("API Response:", response.data);
+        let hasImage = response.data.docs.filter((book) =>
+          book.hasOwnProperty("cover_i")
+        );
+
+        setFilteredBooks(hasImage);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        // Handle errors here
+        console.error("API Error:", error);
+      });
+  };
+
+  const handleSearch = (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+    navigate(`/search/${search}`);
+
+    if (bothChecked) {
+      searchForBoth();
+    }
+    if (!bothChecked) {
+      searchForRadioOption();
+    }
+  };
   useEffect(() => {
     console.log(radioOption);
     console.log(search);
+    console.log("query: ", query, " search: ", search);
   }, [radioOption, search, filteredBooks]);
 
   useEffect(() => {
-    if (query !== undefined) {
-      setSearch(query);
-    }
+    query && setSearch(query);
+
+    console.log("query: ", query, " search: ", search);
+    // handleSearch();
   }, [query]);
   console.log(filter);
   return (
     <section className="display">
       <h1>Search</h1>
-      <Form className="d-flex align-items-center">
+      <Form className="d-flex align-items-center" onSubmit={handleSearch}>
         <FormControl
           type="search"
-          className="searchParams1 nav-search w-100"
+          className="searchParams1 nav-search"
           placeholder="search books..."
-          value={search}
+          // value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <Button onClick={handleSearch}>Search</Button>
@@ -109,13 +153,33 @@ const Search = () => {
               type="radio"
               id={`inline-${type}-1`}
               checked={radioOption === type}
-              onChange={() => setRadioOption(type)}
+              onChange={() => {
+                setRadioOption(type);
+                setBothChecked(false);
+              }}
             />
           </div>
         ))}
+        <div className="mb-3">
+          <Form.Check
+            inline
+            label="Both"
+            name="group1"
+            type="checkbox"
+            id="inline-both-1"
+            checked={bothChecked}
+            onChange={() => {
+              if (radioOption !== "") {
+                setRadioOption("");
+                setBothChecked(!bothChecked);
+              }
+            }}
+          />
+        </div>
       </Form>
 
       <div>
+        {isLoading && <LoadingSpinner />}
         {filteredBooks
           ? filteredBooks.map((book, index) => (
               <div key={index}>
