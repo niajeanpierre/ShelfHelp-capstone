@@ -1,3 +1,20 @@
 img {
   max-width: 150px;
+  align-self: center;
+}
+
+.bookCard {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.singleBook {
+  margin: 5px;
+}
+
+.mb-3 {
+  margin-left: 10px;
+}
+
+.book {
 }

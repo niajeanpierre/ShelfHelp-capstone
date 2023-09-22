@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import cover from "../../images/cover.png";
 import "./search.css";
-import { Form, FormControl, Button } from "react-bootstrap";
+import { Form, FormControl, Button, Card, ListGroup } from "react-bootstrap";
 import axios from "axios";
 import LoadingSpinner from "../../components/loadingSpinner/loadingspinner";
+import BookMenu from "../../components/BookMenu";
 const Search = () => {
   const navigate = useNavigate();
   const { query } = useParams();
@@ -128,7 +129,6 @@ const Search = () => {
     query && setSearch(query);
 
     console.log("query: ", query, " search: ", search);
-    // handleSearch();
   }, [query]);
   console.log(filter);
   return (
@@ -139,7 +139,6 @@ const Search = () => {
           type="search"
           className="searchParams1 nav-search"
           placeholder="search books..."
-          // value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <Button onClick={handleSearch}>Search</Button>
@@ -178,19 +177,38 @@ const Search = () => {
         </div>
       </Form>
 
-      <div>
+      <div className="bookCard">
         {isLoading && <LoadingSpinner />}
+
         {filteredBooks
           ? filteredBooks.map((book, index) => (
-              <div key={index}>
-                <h4>
-                  {book.title} || Author:{book.author_name}
-                </h4>
-                <img
-                  src={`https://covers.openlibrary.org/b/id/${book.cover_i}-S.jpg`}
+              <Card
+                className="singleBook"
+                key={index}
+                style={{ width: "16rem" }}
+              >
+                <Card.Img
+                  variant="top"
+                  src={`https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`}
                   alt={`Cover for ${book.title}`}
                 />
-              </div>
+                <Card.Body>
+                  <Card.Title>
+                    "{book.title}" by {book.author_name}
+                  </Card.Title>
+                </Card.Body>
+                <ListGroup className="list-group-flush">
+                  <ListGroup.Item>
+                    <BookMenu />
+                  </ListGroup.Item>
+                  <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
+                  <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+                </ListGroup>
+                {/* <Card.Body>
+                  <Card.Link href="#">Card Link</Card.Link>
+                  <Card.Link href="#">Another Link</Card.Link>
+                </Card.Body> */}
+              </Card>
             ))
           : filter.map((book, index) => (
               <div key={index}>
