@@ -3,22 +3,22 @@ const { v4:uuidv4 } = require("uuid")
 
 const bookSchema = new mongoose.Schema(
     {
-        bookid: {
+        /*bookid: {
             type: String,
             unique: true,
             default: uuidv4
-        },
+        },*/
         title: {
             type: String,
             required: true,
             minlength: 2,
-            maxlength: 30,
+            maxlength: 50,
         },
         author: {
             type: String,
             required: true,
             minlength: 2,
-            maxlength:20,
+            maxlength:30,
         },
         cover: {
             type: String,
@@ -28,9 +28,6 @@ const bookSchema = new mongoose.Schema(
         },
         review: {
             type: String,
-            required: true,
-            minlength: 10,
-            maxlength: 300,
         },
         quotes: {
             type: String,

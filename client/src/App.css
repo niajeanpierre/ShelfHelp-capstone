@@ -25,7 +25,9 @@ body {
 }
 
 .display.landing-background {
-      background-image: url("../src/images/landing-background.png") !important;
+    background-image: url("../src/images/landing-background.png") !important;
+    background-size: cover;
+    background-position: center;
 }
 
 .active {
@@ -37,11 +39,34 @@ body {
 }
 
 .nav-search {
-  background-color: #bbd2ed !important;
+    width: 20rem !important;
+}
+
+input, textarea {
+    background-color: #bbd2ed !important;
+    font-size: large !important;
 }
 
 .bookShelf {
     flex: 1;
     display: flex;
     flex-direction: column;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    color: #090b38;
+}
+
+
+.hover {
+  cursor: pointer;
+}
+
+.hover:hover {
+  scale: 110%;
 }

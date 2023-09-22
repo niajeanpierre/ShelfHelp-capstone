@@ -3,8 +3,7 @@ import { Book } from "../models"
 
 const router = Router()
 
-router.post('/:bookid', async (req, res, next) => {
-    const { bookid } = req.params
+router.post('/', async (req, res, next) => {
     const { title, author, cover, category, review, quotes, notes } = req.body
 
         console.log(title)
@@ -14,7 +13,7 @@ router.post('/:bookid', async (req, res, next) => {
             title: title,
             author: author,
             cover: cover,
-            category: category, 
+            category: category,
             review: review,
             quotes: quotes,
             notes: notes,
@@ -27,10 +26,10 @@ router.post('/:bookid', async (req, res, next) => {
             return res.status(422).json({ error: err })
         }
 
-    }) 
+    })
 
-    router.get('/:bookid', async (req, res, next) => {
-        const { bookid } = req.params
+    router.get('/:title', async (req, res, next) => {
+        const { title } = req.params;
 
         try {
             const book = await Book.findOne({bookid: bookid})
