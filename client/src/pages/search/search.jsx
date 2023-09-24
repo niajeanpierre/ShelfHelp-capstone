@@ -15,60 +15,15 @@ const Search = () => {
   const [filteredBooks, setFilteredBooks] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
-  const books = [
-    {
-      title: "Harry Potter and the Philosopher's stone",
-      author: "JK Rowling",
-      cover: cover,
-      category: "read",
-    },
-    {
-      title: "Harry Potter and the Chamber of Secrets",
-      author: "JK Rowling",
-      cover: cover,
-      category: "read",
-    },
-    {
-      title: "Harry Potter and the Prisoner of Azkaban",
-      author: "JK Rowling",
-      cover: cover,
-      category: "read",
-    },
-    {
-      title: "Harry Potter and the Goblet of Fire",
-      author: "JK Rowling",
-      cover: cover,
-      category: "read",
-    },
-    {
-      title: "Harry Potter and the Order of the Phoenix",
-      author: "JK Rowling",
-      cover: cover,
-      category: "read",
-    },
-    {
-      title: "Harry Potter and the Half-Blood Prince",
-      author: "JK Rowling",
-      cover: cover,
-      category: "read",
-    },
-    {
-      title: "Harry Potter and the Deathly Hallows",
-      author: "JK Rowling",
-      cover: cover,
-      category: "reading",
-    },
-  ];
-
-  const filter = books.filter((book) =>
-    book.title.toLowerCase().includes(search.toLowerCase())
-  );
-
   const searchForBoth = () => {
     setIsLoading(true);
     console.log(`searching for both is: ${bothChecked}: ${search}`);
     axios
-      .get(`https://openlibrary.org/search.json?q=${search}`)
+      .get(
+        `https://openlibrary.org/search.json?q=${
+          search === "" ? "tolkien" : search
+        }`
+      )
       .then((response) => {
         // Handle the API response here
         console.log("API Response:", response.data);
@@ -110,6 +65,7 @@ const Search = () => {
     if (e) {
       e.preventDefault();
     }
+
     navigate(`/search/${search}`);
 
     if (bothChecked) {
@@ -127,10 +83,12 @@ const Search = () => {
 
   useEffect(() => {
     query && setSearch(query);
+    if (query === undefined) {
+      handleSearch();
+    }
 
     console.log("query: ", query, " search: ", search);
   }, [query]);
-  console.log(filter);
   return (
     <section className="display">
       <h1>Search</h1>
@@ -180,44 +138,33 @@ const Search = () => {
       <div className="bookCard">
         {isLoading && <LoadingSpinner />}
 
-        {filteredBooks
-          ? filteredBooks.map((book, index) => (
-              <Card
-                className="singleBook"
-                key={index}
-                style={{ width: "16rem" }}
-              >
-                <Card.Img
-                  variant="top"
-                  src={`https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`}
-                  alt={`Cover for ${book.title}`}
-                />
-                <Card.Body>
-                  <Card.Title>
-                    "{book.title}" by {book.author_name}
-                  </Card.Title>
-                </Card.Body>
-                <ListGroup className="list-group-flush">
-                  <ListGroup.Item>
-                    <BookMenu />
-                  </ListGroup.Item>
-                  <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-                  <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
-                </ListGroup>
-                {/* <Card.Body>
+        {filteredBooks ? (
+          filteredBooks.map((book, index) => (
+            <Card className="singleBook" key={index} style={{ width: "16rem" }}>
+              <Card.Img
+                variant="top"
+                src={`https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`}
+                alt={`Cover for ${book.title}`}
+              />
+              <Card.Body>
+                <Card.Title>"{book.title}"</Card.Title>
+              </Card.Body>
+              <ListGroup className="list-group-flush">
+                <ListGroup.Item>by {book.author_name}</ListGroup.Item>
+                <ListGroup.Item>
+                  <BookMenu book={book} />
+                </ListGroup.Item>
+                {/* className="starRating" <ListGroup.Item>Vestibulum at eros</ListGroup.Item> */}
+              </ListGroup>
+              {/* <Card.Body>
                   <Card.Link href="#">Card Link</Card.Link>
                   <Card.Link href="#">Another Link</Card.Link>
                 </Card.Body> */}
-              </Card>
-            ))
-          : filter.map((book, index) => (
-              <div key={index}>
-                <h4>
-                  {book.title} || Author:{book.author}
-                </h4>
-                {/* <img src={book.cover} alt={`Cover for ${book.title}`} /> */}
-              </div>
-            ))}
+            </Card>
+          ))
+        ) : (
+          <div></div>
+        )}
       </div>
     </section>
   );
