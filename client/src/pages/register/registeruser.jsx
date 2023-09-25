@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from "axios";
 
 const RegisterPage = () => {
   const [username, setUsername] = useState('');
@@ -7,10 +8,17 @@ const RegisterPage = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [registrationSuccessful, setRegistrationSuccessful] = useState(false);
 
-  const handleRegister = () => {
-    // Implement your registration logic here, e.g., sending data to a server.
-    // For this example, we'll assume successful registration.
-    setRegistrationSuccessful(true);
+  const handleRegister = async () => {
+    const user = await axios.post(
+      "http://localhost:3001/api/auth/signup", {
+        username: username,
+        password: password
+      }
+    )
+    console.log(user)
+    if (user.status === 200) {
+      setRegistrationSuccessful(true);
+    }
   };
 
   return (
