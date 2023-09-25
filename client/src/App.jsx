@@ -12,8 +12,6 @@ import Navigation from "./components/Navigation";
 import Search from "./pages/search/search";
 import "./App.css";
 import NotePage from "./pages/note/NotePage";
-import BookInfo from "./pages/bookInfo/bookInfo";
-
 
 function UseLocationEffect() {
     const location = useLocation();
@@ -41,7 +39,6 @@ function App() {
                     <Route path="/search" element={<Search />} />
                     <Route path="/search/:query" element={<Search />} />
                     <Route path="/note/:title" element={<NotePage />} />
-                    <Route path="/book/:title" element={<BookInfo />} />
                 </Routes>
             </div>
         </Router>
