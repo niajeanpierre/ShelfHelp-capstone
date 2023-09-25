@@ -15,21 +15,42 @@ const Search = () => {
   const [filteredBooks, setFilteredBooks] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
-  const searchForBoth = () => {
-    setIsLoading(true);
-    console.log(`searching for both is: ${bothChecked}: ${search}`);
+  const searchSearch = () => {
     axios
       .get(
         `https://openlibrary.org/search.json?q=${
-          search === "" ? "tolkien" : search
+          query === undefined ? "tolkien" : query
         }`
       )
       .then((response) => {
         // Handle the API response here
-        console.log("API Response:", response.data);
+        // console.log("API Response:", response.data);
         let hasImage = response.data.docs.filter((book) =>
           book.hasOwnProperty("cover_i")
         );
+        // console.log(hasImage);
+        setFilteredBooks(hasImage);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        // Handle errors here
+        console.error("API Error:", error);
+      });
+  };
+  const searchQuery = () => {
+    axios
+      .get(
+        `https://openlibrary.org/search.json?q=${
+          query === "" ? "tolkien" : query
+        }`
+      )
+      .then((response) => {
+        // Handle the API response here
+        // console.log("API Response:", response.data);
+        let hasImage = response.data.docs.filter((book) =>
+          book.hasOwnProperty("cover_i")
+        );
+        // console.log(hasImage);
 
         setFilteredBooks(hasImage);
         setIsLoading(false);
@@ -38,19 +59,30 @@ const Search = () => {
         // Handle errors here
         console.error("API Error:", error);
       });
+  };
+
+  const searchForBoth = () => {
+    setIsLoading(true);
+    // console.log(`searching for both is: ${bothChecked}: ${search}  `, query);
+    if (query) {
+      searchQuery();
+    } else {
+      searchSearch();
+    }
   };
   const searchForRadioOption = () => {
     setIsLoading(true);
 
-    console.log(`searching for ${radioOption}: ${search}`);
+    // console.log(`searching for ${radioOption}: ${search}`);
     axios
       .get(`https://openlibrary.org/search.json?${radioOption}=${search}`)
       .then((response) => {
         // Handle the API response here
-        console.log("API Response:", response.data);
+        // console.log("API Response:", response.data);
         let hasImage = response.data.docs.filter((book) =>
           book.hasOwnProperty("cover_i")
         );
+        // console.log(hasImage);
 
         setFilteredBooks(hasImage);
         setIsLoading(false);
@@ -60,14 +92,13 @@ const Search = () => {
         console.error("API Error:", error);
       });
   };
-
+  const handleNavigate = () => {
+    navigate(`/search/${search}`);
+  };
   const handleSearch = (e) => {
     if (e) {
       e.preventDefault();
     }
-
-    navigate(`/search/${search}`);
-
     if (bothChecked) {
       searchForBoth();
     }
@@ -75,38 +106,36 @@ const Search = () => {
       searchForRadioOption();
     }
   };
-  useEffect(() => {
-    console.log(radioOption);
-    console.log(search);
-    console.log("query: ", query, " search: ", search);
-  }, [radioOption, search, filteredBooks]);
+  // useEffect(() => {
+
+  // }, []);
 
   useEffect(() => {
+    // console.log(`setting search: ${search} to query: ${query}`);
     query && setSearch(query);
-    if (query === undefined) {
-      handleSearch();
-    }
 
-    console.log("query: ", query, " search: ", search);
-  }, [query]);
+    handleSearch();
+
+    // console.log("query: ", query, " search: ", search);
+  }, [query, radioOption]);
   return (
     <section className="display">
       <h1>Search</h1>
-      <Form className="d-flex align-items-center" onSubmit={handleSearch}>
+      <Form className="d-flex align-items-center" onSubmit={handleNavigate}>
         <FormControl
           type="search"
           className="searchParams1 nav-search"
           placeholder="search books..."
           onChange={(e) => setSearch(e.target.value)}
         />
-        <Button onClick={handleSearch}>Search</Button>
+        <Button onClick={handleNavigate}>Search</Button>
 
         {["title", "author"].map((type) => (
           <div key={`inline-${type}`} className="mb-3">
             <Form.Check
               inline
               label={type === "title" ? "Title" : "Author"}
-              name="group1"
+              name={type}
               type="radio"
               id={`inline-${type}-1`}
               checked={radioOption === type}
