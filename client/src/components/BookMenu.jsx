@@ -27,7 +27,7 @@ const BookMenu = ({ book, addCategory }) => {
         if (location.pathname.startsWith("/search")) {
             try {
                 const response = await axios.post(
-                    "http://localhost:3001/api/books",
+                    "http://localhost:3001/api/book",
                     newBook
                 );
                 if (response.status === 201) {

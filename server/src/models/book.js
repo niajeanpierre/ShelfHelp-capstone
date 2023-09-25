@@ -1,13 +1,7 @@
 import mongoose from 'mongoose'
-const { v4:uuidv4 } = require("uuid")
 
 const bookSchema = new mongoose.Schema(
     {
-        /*bookid: {
-            type: String,
-            unique: true,
-            default: uuidv4
-        },*/
         title: {
             type: String,
             required: true,
