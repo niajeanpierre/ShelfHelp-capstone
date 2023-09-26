@@ -41,7 +41,7 @@ router.get("/:title", async (req, res, next) => {
     }
 });
 
-bookRouter.put("/:title", async (req, res) => {
+router.put("/:title", async (req, res) => {
     const { title } = req.params;
     const updatedData = req.body;
 

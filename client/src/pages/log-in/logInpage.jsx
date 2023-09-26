@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const LoginPage = () => {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -7,18 +8,17 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const users = [
-    { username: 'user1', password: 'password1' },
-    { username: 'user2', password: 'password2' },
-    // Add more user data here
-  ];
-
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // Simulate authentication by checking if the provided username and password match a user in the users array
-    const user = users.find((user) => user.username === username && user.password === password);
-
+    const user = await axios.post(
+      "http://localhost:3001/api/auth/signin", {
+        username: username,
+        password: password
+      }
+    )
     if (user) {
       setLoggedIn(true);
+      console.log("login")
       setError('');
     } else {
       setLoggedIn(false);
