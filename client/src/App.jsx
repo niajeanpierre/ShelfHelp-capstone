@@ -12,18 +12,11 @@ import Navigation from "./components/Navigation";
 import Search from "./pages/search/search";
 import "./App.css";
 import NotePage from "./pages/note/NotePage";
-import LoginPage from "./pages/log-in/LogInPage";
+import LoginPage from "./pages/log-in/logInpage";
 import RegisterPage from "./pages/register/registeruser";
 
 function UseLocationEffect() {
     const location = useLocation();
-
-    useEffect(() => {
-        const isLandingPage = location.pathname === "/";
-
-        const display = document.querySelector(".display");
-        display.classList.toggle("landing-background", isLandingPage);
-    }, [location]);
 
     return null;
 }
