@@ -5,14 +5,10 @@ const bookSchema = new mongoose.Schema(
         title: {
             type: String,
             required: true,
-            minlength: 2,
-            maxlength: 50,
         },
         author: {
             type: String,
             required: true,
-            minlength: 2,
-            maxlength:30,
         },
         cover: {
             type: String,

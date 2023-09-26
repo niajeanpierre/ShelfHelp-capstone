@@ -20,8 +20,10 @@ router.post("/", async (req, res, next) => {
 
     try {
         const savedBook = await book.save();
-        res.json(savedBook.toJSON());
+      res.json(savedBook.toJSON());
+      console.log(`successfully saved ${savedBook.title} to DB`)
     } catch (err) {
+      console.error(err)
         return res.status(422).json({ error: err });
     }
 });
