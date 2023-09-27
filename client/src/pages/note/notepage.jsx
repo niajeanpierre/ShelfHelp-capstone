@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './NotePage.css';
 
-const NotePage = ({ location }) => {
+const NotePage = () => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState('');
   const [bookTitle, setBookTitle] = useState('');
@@ -57,7 +57,7 @@ const NotePage = ({ location }) => {
     alert('Content saved successfully!');
   };
 
-  
+
   return (
     <div className="note-page-container display">
       <div className="note-page">
@@ -105,7 +105,7 @@ const NotePage = ({ location }) => {
             </li>
           ))}
         </ul>
-        <button className="publish-button" onClick={publish}>
+        <button className="publish-button" onClick={addNote}>
           Publish
         </button>
       </div>
