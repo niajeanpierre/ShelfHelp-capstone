@@ -4,7 +4,7 @@ import { User } from '../models'
 
 module.exports = async (req, res, next) => {
   const authorization = req.get('authorization')
-
+  // add header to requests called ^, nd the token through it
   if (!authorization) {
     return res.status(401).json({ error: 'you must be logged in' })
   }
