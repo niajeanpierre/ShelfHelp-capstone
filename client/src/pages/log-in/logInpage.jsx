@@ -33,27 +33,30 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-container">
-        <h1>Login</h1>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button onClick={handleLogin}>Login</button>
-        <p>
-          Don't have an account? <Link to="/register">Register here</Link>
-        </p>
+      <div className="login-page display">
+          <div className="login-container d-flex flex-column align-items-center">
+              <h1>Login</h1>
+              <input
+                  className="w-25"
+                  type="text"
+                  placeholder="Username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+              />
+              <input
+                  className="w-25"
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+              />
+              <button onClick={handleLogin}>Login</button>
+              <p>
+                  Don't have an account?{" "}
+                  <Link to="/register">Register here</Link>
+              </p>
+          </div>
       </div>
-    </div>
   );
 };
 

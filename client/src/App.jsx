@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
     BrowserRouter as Router,
     Routes,
@@ -14,6 +14,7 @@ import "./App.css";
 import NotePage from "./pages/note/NotePage";
 import LoginPage from "./pages/log-in/LogInPage";
 import RegisterPage from "./pages/register/registeruser";
+import SignUpNav from "./components/SignUpNav";
 
 function UseLocationEffect() {
     const location = useLocation();
@@ -29,11 +30,18 @@ function UseLocationEffect() {
 }
 
 function App() {
+      const [LoggedIn, setLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+
     return (
         <Router>
             <div className="App">
                 <UseLocationEffect />
-                <Navigation />
+                {LoggedIn ? (
+                    <Navigation setLoggedIn={setLoggedIn} />
+                ) : (
+                    <SignUpNav setLoggedIn={setLoggedIn} />
+                )}
                 <Routes>
                     <Route path="/" exact element={<Landing />} />
                     <Route path="/shelf" element={<Shelf />} />
@@ -42,7 +50,7 @@ function App() {
                     <Route path="/search/:query" element={<Search />} />
                     <Route path="/note/:title" element={<NotePage />} />
                     <Route path="/login" element={<LoginPage />} />
-                    <Route path="/register" element={<RegisterPage />} /> 
+                    <Route path="/register" element={<RegisterPage />} />
                 </Routes>
             </div>
         </Router>
