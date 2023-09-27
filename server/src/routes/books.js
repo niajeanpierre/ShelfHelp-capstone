@@ -20,9 +20,25 @@ router.post("/", async (req, res, next) => {
 
     try {
         const savedBook = await book.save();
-        res.json(savedBook.toJSON());
+      res.json(savedBook.toJSON());
+      console.log(`successfully saved ${savedBook.title} to DB`)
     } catch (err) {
+      console.error(err)
         return res.status(422).json({ error: err });
+    }
+});
+
+router.get("/", async (req, res) => {
+    try {
+        const { userId } = req.query;
+        const books = await Book.find({ userId });
+        if (books.length > 0) {
+            res.status(200).json(books);
+        } else {
+            res.status(404).send("Cannot find books for the user");
+        }
+    } catch (error) {
+        res.status(500).send(error);
     }
 });
 

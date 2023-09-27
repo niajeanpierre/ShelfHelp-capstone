@@ -5,7 +5,7 @@ import axios from "axios";
 const BookMenu = ({ book, addCategory }) => {
     const location = useLocation();
     const navigate = useNavigate();
-    const [displayValue, setDisplayValue] = useState("Add to Shelf");
+  const [displayValue, setDisplayValue] = useState("Add to Shelf");
 
     useEffect(() => {
         if (location.pathname.startsWith("/search/")) {
@@ -18,11 +18,13 @@ const BookMenu = ({ book, addCategory }) => {
     const handleCategoryChange = async (e) => {
         const newCategory = e.target.value;
         let newBook = {
-            author: book.author,
+            author: book.author_name? book.author_name[0] : "unknown",
             title: book.title,
-            cover: book.coverI,
+            cover: book.cover_i,
             category: newCategory,
-        };
+      };
+
+      console.log(newBook)
 
         if (location.pathname.startsWith("/search")) {
             try {
@@ -30,7 +32,7 @@ const BookMenu = ({ book, addCategory }) => {
                     "http://localhost:3001/api/book",
                     newBook
                 );
-                if (response.status === 201) {
+                if (response.status === 200) {
                     console.log("Book successfully saved to MongoDB.");
                     if (newCategory === "read") {
                         navigate(`/note/${book.title}`, {
