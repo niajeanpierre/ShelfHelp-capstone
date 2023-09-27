@@ -1,14 +1,16 @@
 import { Router } from "express";
 import { Book } from "../models";
+import { requireAuth } from "../middleware";
 
 const router = Router();
 
-router.post("/", async (req, res, next) => {
+router.post("/", requireAuth, async (req, res, next) => {
     const { title, author, cover, category, review, quotes, notes } = req.body;
-
-    console.log(title);
+    const { user } = req 
+    console.log(user)
 
     const book = new Book({
+        username: user.username,
         title: title,
         author: author,
         cover: cover,
@@ -20,33 +22,45 @@ router.post("/", async (req, res, next) => {
 
     try {
         const savedBook = await book.save();
-      res.json(savedBook.toJSON());
-      console.log(`successfully saved ${savedBook.title} to DB`)
+        console.log(`successfully saved ${savedBook.title} to DB`)
+        res.json(savedBook.toJSON());
+
+        if (user.customBookInfo.includes(savedBook.id)) {
+            const result = await user.updateOne({
+            $pull: { customBookInfo: savedBook.id },
+            })
+        } else {
+            const result = await user.updateOne({
+            $push: { customBookInfo: savedBook.id },
+            })
+        }
     } catch (err) {
       console.error(err)
         return res.status(422).json({ error: err });
     }
 });
 
-router.get("/", async (req, res) => {
+router.get("/", requireAuth, async (req, res) => {
     try {
-        const { userId } = req.query;
-        const books = await Book.find({ userId });
+        const { user } = req
+        const books = await Book.find({ username: user.username });
         if (books.length > 0) {
             res.status(200).json(books);
         } else {
-            res.status(404).send("Cannot find books for the user");
+            res.status(404).send(`Can not find books for ${user.username}`);
         }
     } catch (error) {
         res.status(500).send(error);
-    }
+    } 
 });
 
-router.get("/:title", async (req, res, next) => {
+router.get("/:title", requireAuth, async (req, res, next) => {
     const { title } = req.params;
+    const { user } = req
 
     try {
-        const book = await Book.findOne({ title });
+        const books = await Book.find({username: user.username})
+        const book = await books.findOne({ title })
         if (book) {
             res.json(book.toJSON()).end();
         } else {
@@ -57,13 +71,14 @@ router.get("/:title", async (req, res, next) => {
     }
 });
 
-router.put("/:title", async (req, res) => {
+router.put("/:title", requireAuth, async (req, res) => {
     const { title } = req.params;
+    const { user } = req
     const updatedData = req.body;
 
     try {
         const book = await Book.findOneAndUpdate(
-            { title: decodeURIComponent(title) },
+            { title: decodeURIComponent(title), username: user.username },
             updatedData,
             { new: true }
         );
@@ -80,11 +95,12 @@ router.put("/:title", async (req, res) => {
     }
 });
 
-router.delete("/:title", async (req, res, next) => {
+router.delete("/:title", requireAuth, async (req, res, next) => {
     const { title } = req.params;
+    const { user } = req
     try {
         await Book.findOneAndDelete({
-            title: decodeURIComponent(title),
+            title: decodeURIComponent(title), username: user.username
         });
         res.status(204).json({
             message: "Book successfully deleted",
