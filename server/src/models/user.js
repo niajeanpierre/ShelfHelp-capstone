@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
   customBookInfo: [
     {
       type: ObjectId,
-      ref: 'customBookInfo',
+      ref: 'Book',
     },
   ],
 })
