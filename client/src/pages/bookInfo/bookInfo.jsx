@@ -27,11 +27,15 @@ const BookInfo = () => {
     }, []);
 
     const handleEdit = async () => {
+        const token = localStorage.getItem('token')
+
         if (isEditing) {
             try {
                 await axios.put(
                     `http://localhost:3001/api/book/${title}`,
-                    book
+                    book, {headers: {
+                        authorization: `Bearer ${token}`,
+                      }}
                 );
                 alert("Success!");
             } catch (error) {
@@ -49,9 +53,12 @@ const BookInfo = () => {
 
     const deleteNote = async (event) => {
         event.preventDefault();
+        const token = localStorage.getItem('token')
         try {
             const response = await axios.delete(
-                `http://localhost:3001/api/book/${title}`
+                `http://localhost:3001/api/book/${title}`, {headers: {
+                    authorization: `Bearer ${token}`,
+                  }}
             );
             if (response.status === 204) {
                 console.log("Book deleted book.");

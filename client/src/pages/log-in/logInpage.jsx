@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-const LoginPage = () => {
+const LoginPage = (params) => {
     const [loggedIn, setLoggedIn] = useState(false);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -29,11 +29,14 @@ const LoginPage = () => {
 
             // Set the user state with the user data
             setUsername(user);
+            params.setUser(user)
 
             setLoggedIn(true);
+            params.setLoggedIn(true)
             setError("");
         } catch (error) {
             setLoggedIn(false);
+            params.setLoggedIn(false)
             setError("Invalid username or password");
         }
     };
@@ -43,7 +46,9 @@ const LoginPage = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         setLoggedIn(false);
+        params.setLoggedIn(false)
         setUsername("");
+        params.setUser(null)
         setPassword("");
     };
 
@@ -54,7 +59,9 @@ const LoginPage = () => {
 
         if (storedToken) {
             setLoggedIn(true);
+            params.setLoggedIn(true)
             setUsername(user);
+            params.setUser(user)
         }
     }, []);
 
