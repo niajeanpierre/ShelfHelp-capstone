@@ -26,6 +26,17 @@ function App() {
     const [LoggedIn, setLoggedIn] = useState(false);
     const [user, setUser] = useState('');
 
+    useEffect(() => {
+        // Check if a token is stored in localStorage when the component mounts
+        const storedToken = localStorage.getItem("token");
+        const user = localStorage.getItem("user");
+
+        if (storedToken) {
+            setLoggedIn(true);
+            setUser(user);
+        }
+    }, []);
+
     return (
         <Router>
             <div className="App">
