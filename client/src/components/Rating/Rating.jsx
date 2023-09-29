@@ -39,11 +39,11 @@ const Rating = ({ count, rating, color, onRating }) => {
 Rating.propTypes = {
   count: PropTypes.number,
   rating: PropTypes.number,
-  onChange: PropTypes.func,
-  color: {
+  onRating: PropTypes.func,
+  color: PropTypes.shape({
     filled: PropTypes.string,
     unfilled: PropTypes.string,
-  },
+  }),
 };
 
 Rating.defaultProps = {

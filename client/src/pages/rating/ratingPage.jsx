@@ -1,20 +1,12 @@
 import React, { useState } from "react";
-// import Header from "components/Header";
-import Rating from "components/Rating";
-// import ExternalInfo from "components/ExternalInfo";
+import Rating from "../../components/Rating/Rating";
 
-const Rating = () => {
+const StarRating = () => {
   const [rating, setRating] = useState(0);
   return (
     <>
-      {/* <Header title="Star rating page" />
-
-      <ExternalInfo page="starRating" /> */}
-
       <div className="row">
         <div className="col text-center">
-          <h2>Rate me</h2>
-          <p>Rating component</p>
           <Rating rating={rating} onRating={(rate) => setRating(rate)} />
           <p>Rating - {rating}</p>
         </div>
@@ -22,6 +14,5 @@ const Rating = () => {
     </>
   );
 };
-//color={{filled: "rgb(136 87 25)", unfilled: "rgb(214 184 147)"}}
-//count={10}
-export default Rating;
+
+export default StarRating;

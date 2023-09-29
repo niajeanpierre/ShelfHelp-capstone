@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import cover from "../../images/cover.png";
 import "./search.css";
 import { Form, FormControl, Button, Card, ListGroup } from "react-bootstrap";
 import axios from "axios";
 import LoadingSpinner from "../../components/loadingSpinner/loadingspinner";
 import BookMenu from "../../components/BookMenu";
-import Rating from "../../components/Rating/Rating";
-
+import StarRating from "../rating/ratingPage";
 const Search = () => {
   const navigate = useNavigate();
   const { query } = useParams();
@@ -186,7 +184,7 @@ const Search = () => {
                   <BookMenu book={book} />
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <Rating />
+                  <StarRating />
                 </ListGroup.Item>
               </ListGroup>
               {/* <Card.Body>
