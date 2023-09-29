@@ -6,6 +6,8 @@ import { Form, FormControl, Button, Card, ListGroup } from "react-bootstrap";
 import axios from "axios";
 import LoadingSpinner from "../../components/loadingSpinner/loadingspinner";
 import BookMenu from "../../components/BookMenu";
+import Rating from "../../components/Rating/Rating";
+
 const Search = () => {
   const navigate = useNavigate();
   const { query } = useParams();
@@ -183,7 +185,9 @@ const Search = () => {
                 <ListGroup.Item>
                   <BookMenu book={book} />
                 </ListGroup.Item>
-                {/* className="starRating" <ListGroup.Item>Vestibulum at eros</ListGroup.Item> */}
+                <ListGroup.Item>
+                  <Rating />
+                </ListGroup.Item>
               </ListGroup>
               {/* <Card.Body>
                   <Card.Link href="#">Card Link</Card.Link>
