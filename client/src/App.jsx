@@ -23,8 +23,8 @@ function UseLocationEffect() {
 }
 
 function App() {
-      const [LoggedIn, setLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
+    const [LoggedIn, setLoggedIn] = useState(false);
+    const [user, setUser] = useState('');
 
     return (
         <Router>
@@ -42,7 +42,8 @@ function App() {
                     <Route path="/search" element={<Search />} />
                     <Route path="/search/:query" element={<Search />} />
                     <Route path="/note/:title" element={<NotePage />} />
-                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/login" element={<LoginPage 
+                    setLoggedIn={setLoggedIn} setUser={setUser}/>} />
                     <Route path="/register" element={<RegisterPage />} />
                 </Routes>
             </div>

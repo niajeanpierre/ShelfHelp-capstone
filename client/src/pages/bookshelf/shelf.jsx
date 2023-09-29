@@ -8,9 +8,12 @@ const Shelf = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            const token = localStorage.getItem('token')
             try {
                 const response = await axios.get(
-                    "http://localhost:3001/api/book"
+                    "http://localhost:3001/api/book", {headers: {
+                        authorization: `Bearer ${token}`,
+                      }}
                 );
                 setBooks(response.data);
             } catch (error) {

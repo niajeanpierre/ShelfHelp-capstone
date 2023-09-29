@@ -25,12 +25,15 @@ const BookMenu = ({ book, addCategory }) => {
       };
 
       console.log(newBook)
+      const token = localStorage.getItem('token')
 
         if (location.pathname.startsWith("/search")) {
             try {
                 const response = await axios.post(
                     "http://localhost:3001/api/book",
-                    newBook
+                    newBook, {headers: {
+                        authorization: `Bearer ${token}`,
+                      }}
                 );
                 if (response.status === 200) {
                     console.log("Book successfully saved to MongoDB.");
