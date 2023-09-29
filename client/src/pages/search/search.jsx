@@ -23,11 +23,14 @@ const Search = () => {
         }`
       )
       .then((response) => {
-        // Handle the API response here
-        // console.log("API Response:", response.data);
-        let hasImage = response.data.docs.filter((book) =>
-          book.hasOwnProperty("cover_i")
-        );
+            const data = response.data;
+            const booksData = data.docs.map((doc) => ({
+                author: doc.author_name ? doc.author_name[0] : "Unknown",
+                title: doc.title,
+                coverI: doc.cover_i,
+            }));
+        console.log("booksData", booksData)
+            let hasImage = booksData.filter((book) => book.coverI);
         // console.log(hasImage);
         setFilteredBooks(hasImage);
         setIsLoading(false);
@@ -39,26 +42,29 @@ const Search = () => {
   };
   const searchQuery = () => {
     axios
-      .get(
-        `https://openlibrary.org/search.json?q=${
-          query === "" ? "tolkien" : query
-        }`
-      )
-      .then((response) => {
-        // Handle the API response here
-        // console.log("API Response:", response.data);
-        let hasImage = response.data.docs.filter((book) =>
-          book.hasOwnProperty("cover_i")
-        );
-        // console.log(hasImage);
+        .get(
+            `https://openlibrary.org/search.json?q=${
+                query === "" ? "tolkien" : query
+            }`
+        )
+        .then((response) => {
+            const data = response.data;
+            const booksData = data.docs.map((doc) => ({
+                author: doc.author_name ? doc.author_name[0] : "Unknown",
+                title: doc.title,
+                coverI: doc.cover_i,
+            }));
+            console.log("booksData", booksData);
+            let hasImage = booksData.filter((book) => book.coverI);
+            // console.log(hasImage);
 
-        setFilteredBooks(hasImage);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        // Handle errors here
-        console.error("API Error:", error);
-      });
+            setFilteredBooks(hasImage);
+            setIsLoading(false);
+        })
+        .catch((error) => {
+            // Handle errors here
+            console.error("API Error:", error);
+        });
   };
 
   const searchForBoth = () => {
@@ -75,22 +81,25 @@ const Search = () => {
 
     // console.log(`searching for ${radioOption}: ${search}`);
     axios
-      .get(`https://openlibrary.org/search.json?${radioOption}=${search}`)
-      .then((response) => {
-        // Handle the API response here
-        // console.log("API Response:", response.data);
-        let hasImage = response.data.docs.filter((book) =>
-          book.hasOwnProperty("cover_i")
-        );
-        // console.log(hasImage);
+        .get(`https://openlibrary.org/search.json?${radioOption}=${search}`)
+        .then((response) => {
+            const data = response.data;
+            const booksData = data.docs.map((doc) => ({
+                author: doc.author_name ? doc.author_name[0] : "Unknown",
+                title: doc.title,
+                coverI: doc.cover_i,
+            }));
+            console.log("booksData", booksData);
+            let hasImage = booksData.filter((book) => book.coverI)
+            // console.log(hasImage);
 
-        setFilteredBooks(hasImage);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        // Handle errors here
-        console.error("API Error:", error);
-      });
+            setFilteredBooks(hasImage);
+            setIsLoading(false);
+        })
+        .catch((error) => {
+            // Handle errors here
+            console.error("API Error:", error);
+        });
   };
   const handleNavigate = () => {
     navigate(`/search/${search}`);
@@ -172,7 +181,7 @@ const Search = () => {
             <Card className="singleBook" key={index} style={{ width: "16rem" }}>
               <Card.Img
                 variant="top"
-                src={`https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`}
+                src={`https://covers.openlibrary.org/b/id/${book.coverI}-M.jpg`}
                 alt={`Cover for ${book.title}`}
               />
               <Card.Body>

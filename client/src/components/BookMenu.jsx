@@ -5,7 +5,7 @@ import axios from "axios";
 const BookMenu = ({ book, addCategory }) => {
     const location = useLocation();
     const navigate = useNavigate();
-  const [displayValue, setDisplayValue] = useState("Add to Shelf");
+    const [displayValue, setDisplayValue] = useState("Add to Shelf");
 
     useEffect(() => {
         if (location.pathname.startsWith("/search/")) {
@@ -18,22 +18,26 @@ const BookMenu = ({ book, addCategory }) => {
     const handleCategoryChange = async (e) => {
         const newCategory = e.target.value;
         let newBook = {
-            author: book.author_name? book.author_name[0] : "unknown",
+            username: book.username,
+            author: book.author,
             title: book.title,
-            cover: book.cover_i,
+            cover: book.coverI,
             category: newCategory,
-      };
+        };
 
-      console.log(newBook)
-      const token = localStorage.getItem('token')
+        console.log("newbook", newBook);
+        const token = localStorage.getItem("token");
 
         if (location.pathname.startsWith("/search")) {
             try {
                 const response = await axios.post(
                     "http://localhost:3001/api/book",
-                    newBook, {headers: {
-                        authorization: `Bearer ${token}`,
-                      }}
+                    newBook,
+                    {
+                        headers: {
+                            authorization: `Bearer ${token}`,
+                        },
+                    }
                 );
                 if (response.status === 200) {
                     console.log("Book successfully saved to MongoDB.");
@@ -46,7 +50,7 @@ const BookMenu = ({ book, addCategory }) => {
                     } else if (newCategory === "tbr") {
                         navigate("/tbr");
                     } else {
-                      alert('Error')
+                        alert("Error");
                     }
                 }
             } catch (error) {
