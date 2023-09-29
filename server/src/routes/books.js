@@ -6,7 +6,7 @@ const router = Router();
 
 router.post("/", requireAuth, async (req, res, next) => {
     const { title, author, cover, category, review, quotes, notes } = req.body;
-    const { user } = req 
+    const { user } = req
     console.log(user)
 
     const book = new Book({
@@ -51,7 +51,7 @@ router.get("/", requireAuth, async (req, res) => {
         }
     } catch (error) {
         res.status(500).send(error);
-    } 
+    }
 });
 
 router.get("/:title", requireAuth, async (req, res, next) => {
@@ -59,14 +59,17 @@ router.get("/:title", requireAuth, async (req, res, next) => {
     const { user } = req
 
     try {
-        const books = await Book.find({username: user.username})
-        const book = await books.findOne({ title })
+        const book = await Book.findOne({
+            username: user.username,
+            title: title,
+        });
         if (book) {
             res.json(book.toJSON()).end();
         } else {
             res.send("Can not find book");
         }
     } catch (err) {
+      console.error(err)
         return res.status(422).json({ error: err });
     }
 });

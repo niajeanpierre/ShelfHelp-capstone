@@ -14,17 +14,25 @@ const BookInfo = () => {
         const fetchData = async () => {
             try {
                 const encodedTitle = encodeURIComponent(title);
+                const token = localStorage.getItem("token");
+
                 const response = await axios.get(
-                    `http://localhost:3001/api/book/${encodedTitle}`
+                    `http://localhost:3001/api/book/${encodedTitle}`,
+                    {
+                        headers: {
+                            authorization: `Bearer ${token}`,
+                        },
+                    }
                 );
-                setBook(response.data);
+              setBook(response.data);
+              console.log(book)
             } catch (error) {
                 console.error("An error occurred while fetching data: ", error);
             }
         };
 
         fetchData();
-    }, []);
+    }, [title]);
 
     const handleEdit = async () => {
         const token = localStorage.getItem('token')

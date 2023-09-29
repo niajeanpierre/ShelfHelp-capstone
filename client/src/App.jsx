@@ -15,16 +15,30 @@ import NotePage from "./pages/note/NotePage";
 import LoginPage from "./pages/log-in/logInpage";
 import RegisterPage from "./pages/register/registeruser";
 import SignUpNav from "./components/SignUpNav";
+import BookInfo from "./pages/bookInfo/bookInfo";
 
 function UseLocationEffect() {
     const location = useLocation();
-
     return null;
 }
 
 function App() {
     const [LoggedIn, setLoggedIn] = useState(false);
-    const [user, setUser] = useState('');
+  const [user, setUser] = useState('');
+  
+useEffect(() => {
+    const checkUserSession = () => {
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            setLoggedIn(true);
+        } else {
+            setLoggedIn(false);
+        }
+    };
+
+    checkUserSession();
+}, []);
 
     return (
         <Router>
@@ -42,9 +56,17 @@ function App() {
                     <Route path="/search" element={<Search />} />
                     <Route path="/search/:query" element={<Search />} />
                     <Route path="/note/:title" element={<NotePage />} />
-                    <Route path="/login" element={<LoginPage 
-                    setLoggedIn={setLoggedIn} setUser={setUser}/>} />
+                    <Route
+                        path="/login"
+                        element={
+                            <LoginPage
+                                setLoggedIn={setLoggedIn}
+                                setUser={setUser}
+                            />
+                        }
+                    />
                     <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/book/:title" element={<BookInfo />} />
                 </Routes>
             </div>
         </Router>

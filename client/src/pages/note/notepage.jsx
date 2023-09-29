@@ -1,117 +1,155 @@
-import React, { useState, useEffect } from 'react';
-import './NotePage.css';
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import "./NotePage.css";
+import BookMenu from "../../components/BookMenu";
+import axios from "axios";
 
 const NotePage = () => {
-  const [notes, setNotes] = useState([]);
-  const [newNote, setNewNote] = useState('');
-  const [bookTitle, setBookTitle] = useState('');
-  const [bookCover, setBookCover] = useState('');
-  const [review, setReview] = useState('');
-  const [quotes, setQuotes] = useState('');
-  const [note, setNote] = useState('');
-  const book = location.state?.book;
-  const [myNote, setMyNote] = useState({ ...book });
+    const location = useLocation();
+    const navigate = useNavigate();
+    const book = location.state?.book || {};
+    const [myNote, setMyNote] = useState({
+        ...book,
+        review: book.review || "",
+        quotes: book.quotes || "",
+        notes: book.notes || ""
+    });
 
-  useEffect(() => {
-    // Fetch book data based on the book ID or title if needed
-
-    // Retrieve saved content from local storage when the component mounts
-    const savedContent = localStorage.getItem('savedContent');
-    if (savedContent) {
-      const parsedContent = JSON.parse(savedContent);
-      setBookTitle(parsedContent.bookTitle);
-      setBookCover(parsedContent.bookCover);
-      setReview(parsedContent.review);
-      setQuotes(parsedContent.quotes);
-      setNotes(parsedContent.notes);
-      setNote(parsedContent.note);
-    }
-  }, [book]);
-
-
-  const addNote = () => {
-    if (newNote.trim() !== '') {
-      setNotes([...notes, newNote]);
-      setNewNote('');
-    }
-  };
-
-  const deleteNote = (index) => {
-    const updatedNotes = [...notes];
-    updatedNotes.splice(index, 1);
-    setNotes(updatedNotes);
-  };
-  const saveContent = () => {
-    // Create an object with the data you want to save
-    const contentToSave = {
-      bookTitle,
-      bookCover,
-      review,
-      quotes,
-      notes,
-      note,
+    const handleChange = (field, value) => {
+        setMyNote(prev => ({ ...prev, [field]: value }));
     };
 
-    localStorage.setItem('savedContent', JSON.stringify(contentToSave));
+    const addCategory = (newCategory) => {
+        setMyNote(prevState => ({
+            ...prevState,
+            category: newCategory,
+        }));
+    };
 
-    alert('Content saved successfully!');
-  };
+    const addNote = async (event) => {
+    event.preventDefault();
+    const token = localStorage.getItem("token");
 
+    try {
+        const checkDuplicates = await axios.get(
+            `http://localhost:3001/api/book/${encodeURIComponent(myNote.title)}`,
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
 
-  return (
-    <div className="note-page-container display">
-      <div className="note-page">
-        <h1>Notes</h1>
-        <div className="book-section">
-          <input
-            type="text"
-            placeholder="Book Title"
-            value={bookTitle}
-            onChange={(e) => setBookTitle(e.target.value)}
-          />
-          {bookCover && <img src={bookCover} alt="Book Cover" />}
-        </div>
-        <div className="sections">
-          <div className="section">
-            <h2>Review</h2>
-            <textarea
-              value={review}
-              onChange={(e) => setReview(e.target.value)}
-              placeholder="Write your review here..."
-            />
-          </div>
-          <div className="section">
-            <h2>Quotes</h2>
-            <textarea
-              value={quotes}
-              onChange={(e) => setQuotes(e.target.value)}
-              placeholder="Add quotes here..."
-            />
-          </div>
-          <div className="section">
-            <h2>Notes</h2>
-            <textarea
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              placeholder="Take notes here..."
-            />
-          </div>
-        </div>
-        <ul className="note-list">
-          {notes.map((note, index) => (
-            <li key={index}>
-              {note}
-              <button onClick={() => deleteNote(index)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-        <button className="publish-button" onClick={addNote}>
-          Publish
-        </button>
-      </div>
-    </div>
-  );
+        if (checkDuplicates.data) {
+            if (
+                checkDuplicates.data.author === myNote.author &&
+                checkDuplicates.data.category === myNote.category &&
+                checkDuplicates.data.notes === myNote.notes &&
+                checkDuplicates.data.quotes === myNote.quotes &&
+                checkDuplicates.data.review === myNote.review
+            ) {
+                alert("You have that book on your shelf with the same details!");
+                console.error("A book with the exact same details already exists.");
+                return;
+            } else {
+                const updateResponse = await axios.put(
+                    `http://localhost:3001/api/book/${encodeURIComponent(myNote.title)}`,
+                    myNote,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                if (updateResponse.status === 200) {
+                    console.log("Book successfully updated in MongoDB.");
+                    navigate("/shelf");
+                } else {
+                    console.log("Failed to update the book.");
+                }
+                return;
+            }
+        }
+
+        const response = await axios.post(
+            "http://localhost:3001/api/book",
+            myNote,
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        if (response.status === 201) {
+            console.log("Book successfully saved to MongoDB.");
+            navigate("/shelf");
+        } else {
+            console.log("Failed to save the book.");
+        }
+    } catch (error) {
+        console.error("An error occurred:", error);
+    }
 };
 
+    const deleteNote = async (event) => {
+      event.preventDefault();
+              const token = localStorage.getItem("token");
+
+        try {
+            const response = await axios.delete(
+                `http://localhost:3001/api/book/${encodeURIComponent(
+                    myNote.title
+                )}`,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            if (response.status === 204) {
+                console.log("Book deleted book.");
+                navigate("/tbr");
+            } else {
+                console.log("Failed to delete the book.");
+            }
+        } catch (error) {
+            console.error("An error occurred:", error);
+        }
+    };
+
+    return (
+        <div className="note-page-container display">
+            <div className="note-page position-relative">
+                <h1>Notes</h1>
+                <i
+                    onClick={deleteNote}
+                    className="fa fa-times hover position-absolute top-0 end-0 text-danger fs-3 m-2"
+                    aria-hidden="true"
+                ></i>
+                <div className="book-section">
+                    <h2>
+                        <span className="fst-italic">{myNote.title} </span>
+                        by {myNote.author}
+                    </h2>
+                </div>
+                <div className="sections">
+                    <div className="section">
+                        <h2>Review</h2>
+                        <textarea
+                            value={myNote.review}
+                            onChange={(e) => handleChange("review", e.target.value)}
+                            placeholder="Write your review here..."
+                        />
+                    </div>
+                    <div className="section">
+                        <h2>Quotes</h2>
+                        <textarea
+                            value={myNote.quotes}
+                            onChange={(e) => handleChange("quotes", e.target.value)}
+                            placeholder="Add quotes here..."
+                        />
+                    </div>
+                    <div className="section">
+                        <h2>Notes</h2>
+                        <textarea
+                            value={myNote.notes}
+                            onChange={(e) => handleChange("notes", e.target.value)}
+                            placeholder="Take notes here..."
+                        />
+                    </div>
+                </div>
+                <BookMenu book={myNote} addCategory={addCategory} />
+                <button className="publish-button" onClick={addNote}>
+                    Publish
+                </button>
+            </div>
+        </div>
+    );
+};
 
 export default NotePage;
