@@ -23,14 +23,14 @@ const Search = () => {
         }`
       )
       .then((response) => {
-            const data = response.data;
-            const booksData = data.docs.map((doc) => ({
-                author: doc.author_name ? doc.author_name[0] : "Unknown",
-                title: doc.title,
-                coverI: doc.cover_i,
-            }));
-        console.log("booksData", booksData)
-            let hasImage = booksData.filter((book) => book.coverI);
+        const data = response.data;
+        const booksData = data.docs.map((doc) => ({
+          author: doc.author_name ? doc.author_name[0] : "Unknown",
+          title: doc.title,
+          coverI: doc.cover_i,
+        }));
+        console.log("booksData", booksData);
+        let hasImage = booksData.filter((book) => book.coverI);
         // console.log(hasImage);
         setFilteredBooks(hasImage);
         setIsLoading(false);
@@ -42,29 +42,29 @@ const Search = () => {
   };
   const searchQuery = () => {
     axios
-        .get(
-            `https://openlibrary.org/search.json?q=${
-                query === "" ? "tolkien" : query
-            }`
-        )
-        .then((response) => {
-            const data = response.data;
-            const booksData = data.docs.map((doc) => ({
-                author: doc.author_name ? doc.author_name[0] : "Unknown",
-                title: doc.title,
-                coverI: doc.cover_i,
-            }));
-            console.log("booksData", booksData);
-            let hasImage = booksData.filter((book) => book.coverI);
-            // console.log(hasImage);
+      .get(
+        `https://openlibrary.org/search.json?q=${
+          query === "" ? "tolkien" : query
+        }`
+      )
+      .then((response) => {
+        const data = response.data;
+        const booksData = data.docs.map((doc) => ({
+          author: doc.author_name ? doc.author_name[0] : "Unknown",
+          title: doc.title,
+          coverI: doc.cover_i,
+        }));
+        console.log("booksData", booksData);
+        let hasImage = booksData.filter((book) => book.coverI);
+        // console.log(hasImage);
 
-            setFilteredBooks(hasImage);
-            setIsLoading(false);
-        })
-        .catch((error) => {
-            // Handle errors here
-            console.error("API Error:", error);
-        });
+        setFilteredBooks(hasImage);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        // Handle errors here
+        console.error("API Error:", error);
+      });
   };
 
   const searchForBoth = () => {
@@ -81,25 +81,25 @@ const Search = () => {
 
     // console.log(`searching for ${radioOption}: ${search}`);
     axios
-        .get(`https://openlibrary.org/search.json?${radioOption}=${search}`)
-        .then((response) => {
-            const data = response.data;
-            const booksData = data.docs.map((doc) => ({
-                author: doc.author_name ? doc.author_name[0] : "Unknown",
-                title: doc.title,
-                coverI: doc.cover_i,
-            }));
-            console.log("booksData", booksData);
-            let hasImage = booksData.filter((book) => book.coverI)
-            // console.log(hasImage);
+      .get(`https://openlibrary.org/search.json?${radioOption}=${search}`)
+      .then((response) => {
+        const data = response.data;
+        const booksData = data.docs.map((doc) => ({
+          author: doc.author_name ? doc.author_name[0] : "Unknown",
+          title: doc.title,
+          coverI: doc.cover_i,
+        }));
+        console.log("booksData", booksData);
+        let hasImage = booksData.filter((book) => book.coverI);
+        // console.log(hasImage);
 
-            setFilteredBooks(hasImage);
-            setIsLoading(false);
-        })
-        .catch((error) => {
-            // Handle errors here
-            console.error("API Error:", error);
-        });
+        setFilteredBooks(hasImage);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        // Handle errors here
+        console.error("API Error:", error);
+      });
   };
   const handleNavigate = () => {
     navigate(`/search/${search}`);
@@ -188,7 +188,7 @@ const Search = () => {
                 <Card.Title>"{book.title}"</Card.Title>
               </Card.Body>
               <ListGroup className="list-group-flush">
-                <ListGroup.Item>by {book.author_name}</ListGroup.Item>
+                <ListGroup.Item>by {book.author}</ListGroup.Item>
                 <ListGroup.Item>
                   <BookMenu book={book} />
                 </ListGroup.Item>
