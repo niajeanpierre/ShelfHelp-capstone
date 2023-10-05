@@ -14,6 +14,44 @@ const Search = () => {
   const [search, setSearch] = useState("");
   const [filteredBooks, setFilteredBooks] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const searchPagination = (page) => {
+    setIsLoading(true);
+    axios
+      .get(
+        `https://openlibrary.org/search.json?q=${
+          query === "" ? "tolkien" : query
+        }&page=${page}`
+      )
+      .then((response) => {
+        const data = response.data;
+        const booksData = data.docs.map((doc) => ({
+          author: doc.author_name ? doc.author_name[0] : "Unknown",
+          title: doc.title,
+          coverI: doc.cover_i,
+        }));
+        console.log("booksData", booksData);
+        let hasImage = booksData.filter((book) => book.coverI);
+
+        setFilteredBooks((prevBooks) =>
+          page === 1 ? hasImage : [...prevBooks, ...hasImage]
+        );
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("API Error:", error);
+      });
+  };
+
+  const loadMore = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  useEffect(() => {
+    query && setSearch(query);
+    searchPagination(currentPage);
+  }, [query, radioOption, currentPage]);
 
   const searchSearch = () => {
     axios
@@ -36,7 +74,6 @@ const Search = () => {
         setIsLoading(false);
       })
       .catch((error) => {
-        // Handle errors here
         console.error("API Error:", error);
       });
   };
@@ -62,7 +99,6 @@ const Search = () => {
         setIsLoading(false);
       })
       .catch((error) => {
-        // Handle errors here
         console.error("API Error:", error);
       });
   };
@@ -97,7 +133,6 @@ const Search = () => {
         setIsLoading(false);
       })
       .catch((error) => {
-        // Handle errors here
         console.error("API Error:", error);
       });
   };
@@ -177,7 +212,7 @@ const Search = () => {
         {isLoading && <LoadingSpinner />}
 
         {filteredBooks ? (
-          filteredBooks.map((book, index) => (
+          filteredBooks.slice(0, currentPage * 28).map((book, index) => (
             <Card className="singleBook" key={index} style={{ width: "16rem" }}>
               <Card.Img
                 variant="top"
@@ -194,16 +229,19 @@ const Search = () => {
                 </ListGroup.Item>
                 {/* className="starRating" <ListGroup.Item>Vestibulum at eros</ListGroup.Item> */}
               </ListGroup>
-              {/* <Card.Body>
-                  <Card.Link href="#">Card Link</Card.Link>
-                  <Card.Link href="#">Another Link</Card.Link>
-                </Card.Body> */}
             </Card>
           ))
         ) : (
           <div></div>
         )}
       </div>
+      {filteredBooks && currentPage * 28 < filteredBooks.length && (
+        <div className="center-button-container">
+          <Button onClick={loadMore} className="loadMoreButton">
+            Load More
+          </Button>
+        </div>
+      )}
     </section>
   );
 };

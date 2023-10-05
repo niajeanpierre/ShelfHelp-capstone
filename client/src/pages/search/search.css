@@ -17,3 +17,11 @@ img {
 .mb-3 {
   margin-left: 10px;
 }
+
+.center-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
