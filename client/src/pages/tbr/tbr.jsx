@@ -10,7 +10,9 @@ const TBR = () => {
             const token = localStorage.getItem('token')
             try {
                 const response = await axios.get(
-                    "http://localhost:3001/api/book", {headers: {
+                    import.meta.env.VITE_NODE_ENV === "production"
+                    ? import.meta.env.VITE_API_URL + `/book`
+                    : "http://localhost:3001/api/book", {headers: {
                         authorization: `Bearer ${token}`,
                       }}
                 );

@@ -11,7 +11,9 @@ const LoginPage = (params) => {
     const handleLogin = async () => {
         try {
             const response = await axios.post(
-                "http://localhost:3001/api/auth/signin",
+                import.meta.env.VITE_NODE_ENV === "production"
+                ? import.meta.env.VITE_API_URL + `/auth/signin`
+                : "http://localhost:3001/api/auth/signin",
                 {
                     username: username,
                     password: password,

@@ -31,7 +31,9 @@ const BookMenu = ({ book, addCategory }) => {
         if (location.pathname.startsWith("/search")) {
             try {
                 const response = await axios.post(
-                    "http://localhost:3001/api/book",
+                    import.meta.env.VITE_NODE_ENV === "production"
+                    ? import.meta.env.VITE_API_URL + '/book'
+                    : "http://localhost:3001/api/book",
                     newBook,
                     {
                         headers: {

@@ -17,7 +17,9 @@ const BookInfo = () => {
                 const token = localStorage.getItem("token");
 
                 const response = await axios.get(
-                    `http://localhost:3001/api/book/${encodedTitle}`,
+                    import.meta.env.VITE_NODE_ENV === "production"
+                    ? import.meta.env.VITE_API_URL + `/book/${encodedTitle}`
+                    : `http://localhost:3001/api/book/${encodedTitle}`,
                     {
                         headers: {
                             authorization: `Bearer ${token}`,
@@ -40,7 +42,9 @@ const BookInfo = () => {
         if (isEditing) {
             try {
                 await axios.put(
-                    `http://localhost:3001/api/book/${title}`,
+                    import.meta.env.VITE_NODE_ENV === "production"
+                    ? import.meta.env.VITE_API_URL + `/book/${title}`
+                    : `http://localhost:3001/api/book/${title}`,
                     book, {headers: {
                         authorization: `Bearer ${token}`,
                       }}
@@ -64,7 +68,9 @@ const BookInfo = () => {
         const token = localStorage.getItem('token')
         try {
             const response = await axios.delete(
-                `http://localhost:3001/api/book/${title}`, {headers: {
+                import.meta.env.VITE_NODE_ENV === "production"
+                ? import.meta.env.VITE_API_URL + `/book/${title}`
+                : `http://localhost:3001/api/book/${title}`, {headers: {
                     authorization: `Bearer ${token}`,
                   }}
             );

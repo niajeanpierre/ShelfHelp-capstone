@@ -19,6 +19,14 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(API_URL, router);
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../client/dist")))
+  app.all("*", (req, res, next) => {
+    res.sendFile(path.resolve(__dirname, "../client/dist/index.html"))
+  })
+ }
+ 
+
 app.listen(PORT, () =>
   console.log(`[Server] Listening for requests at http://localhost:${PORT}`)
 );
