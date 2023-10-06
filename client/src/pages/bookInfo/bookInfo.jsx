@@ -18,16 +18,16 @@ const BookInfo = () => {
 
                 const response = await axios.get(
                     import.meta.env.VITE_NODE_ENV === "production"
-                    ? import.meta.env.VITE_API_URL + `/book/${encodedTitle}`
-                    : `http://localhost:3001/api/book/${encodedTitle}`,
+                        ? import.meta.env.VITE_API_URL + `/book/${encodedTitle}`
+                        : `http://localhost:3001/api/book/${encodedTitle}`,
                     {
                         headers: {
                             authorization: `Bearer ${token}`,
                         },
                     }
                 );
-              setBook(response.data);
-              console.log(book)
+                setBook(response.data);
+                console.log(book);
             } catch (error) {
                 console.error("An error occurred while fetching data: ", error);
             }
@@ -37,17 +37,20 @@ const BookInfo = () => {
     }, [title]);
 
     const handleEdit = async () => {
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem("token");
 
         if (isEditing) {
             try {
                 await axios.put(
                     import.meta.env.VITE_NODE_ENV === "production"
-                    ? import.meta.env.VITE_API_URL + `/book/${title}`
-                    : `http://localhost:3001/api/book/${title}`,
-                    book, {headers: {
-                        authorization: `Bearer ${token}`,
-                      }}
+                        ? import.meta.env.VITE_API_URL + `/book/${title}`
+                        : `http://localhost:3001/api/book/${title}`,
+                    book,
+                    {
+                        headers: {
+                            authorization: `Bearer ${token}`,
+                        },
+                    }
                 );
                 alert("Success!");
             } catch (error) {
@@ -65,14 +68,17 @@ const BookInfo = () => {
 
     const deleteNote = async (event) => {
         event.preventDefault();
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem("token");
         try {
             const response = await axios.delete(
                 import.meta.env.VITE_NODE_ENV === "production"
-                ? import.meta.env.VITE_API_URL + `/book/${title}`
-                : `http://localhost:3001/api/book/${title}`, {headers: {
-                    authorization: `Bearer ${token}`,
-                  }}
+                    ? import.meta.env.VITE_API_URL + `/book/${title}`
+                    : `http://localhost:3001/api/book/${title}`,
+                {
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                    },
+                }
             );
             if (response.status === 204) {
                 console.log("Book deleted book.");
@@ -82,6 +88,14 @@ const BookInfo = () => {
             }
         } catch (error) {
             console.error("An error occurred:", error);
+        }
+    };
+
+    const exitNote = () => {
+        if (book.category === "tbr") {
+            navigate("/tbr");
+        } else {
+            navigate("/shelf");
         }
     };
 
@@ -98,8 +112,8 @@ const BookInfo = () => {
                 <h2 className="fst-italic">{book.title}</h2>
                 <p className="fs-4 fw-medium">by {book.author}</p>
                 <i
-                    onClick={deleteNote}
-                    className="fa fa-times hover position-absolute top-0 end-0 text-danger fs-3 m-2"
+                    onClick={exitNote}
+                    className="fa fa-times hover position-absolute top-0 end-0 fs-3 m-2"
                     aria-hidden="true"
                 ></i>
                 <div className="d-flex flex-column">
@@ -145,6 +159,13 @@ const BookInfo = () => {
                     ></textarea>
                 </div>
                 <div className="d-flex justify-content-end mt-5">
+                    <button
+                        type="button"
+                        onClick={deleteNote}
+                        className="note-button mx-5 bg-danger-subtle text-danger font-bold"
+                    >
+                        delete
+                    </button>
                     <button
                         type="button"
                         onClick={handleEdit}

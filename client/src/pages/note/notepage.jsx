@@ -108,15 +108,23 @@ const NotePage = () => {
         } catch (error) {
             console.error("An error occurred:", error);
         }
-    };
+  };
+
+        const exitNote = () => {
+            if (book.category === "tbr") {
+                navigate("/tbr");
+            } else {
+                navigate("/shelf");
+            }
+        };
 
     return (
         <div className="note-page-container display">
             <div className="note-page position-relative">
                 <h1>Notes</h1>
                 <i
-                    onClick={deleteNote}
-                    className="fa fa-times hover position-absolute top-0 end-0 text-danger fs-3 m-2"
+                    onClick={exitNote}
+                    className="fa fa-times hover position-absolute top-0 end-0 fs-4 m-2"
                     aria-hidden="true"
                 ></i>
                 <div className="book-section">
