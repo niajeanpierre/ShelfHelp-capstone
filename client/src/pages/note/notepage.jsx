@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import "./NotePage.css";
+import "./notepage.css";
 import BookMenu from "../../components/BookMenu";
 import axios from "axios";
 
