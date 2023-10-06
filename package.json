@@ -15,6 +15,7 @@
     "client",
     "server"
   ],
+  "build": "npm run build --workspace=client && npm run build --workspace=server",
   "devDependencies": {
     "concurrently": "^8.2.1"
   },

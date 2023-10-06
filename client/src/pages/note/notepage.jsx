@@ -32,7 +32,9 @@ const NotePage = () => {
 
     try {
         const checkDuplicates = await axios.get(
-            `http://localhost:3001/api/book/${encodeURIComponent(myNote.title)}`,
+            import.meta.env.VITE_NODE_ENV === "production"
+            ? import.meta.env.VITE_API_URL + `/book/${encodeURIComponent(myNote.title)}`
+            : `http://localhost:3001/api/book/${encodeURIComponent(myNote.title)}`,
             { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -49,7 +51,9 @@ const NotePage = () => {
                 return;
             } else {
                 const updateResponse = await axios.put(
-                    `http://localhost:3001/api/book/${encodeURIComponent(myNote.title)}`,
+                    import.meta.env.VITE_NODE_ENV === "production"
+                    ? import.meta.env.VITE_API_URL + `/book/${encodeURIComponent(myNote.title)}`
+                    :`http://localhost:3001/api/book/${encodeURIComponent(myNote.title)}`,
                     myNote,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
@@ -64,7 +68,9 @@ const NotePage = () => {
         }
 
         const response = await axios.post(
-            "http://localhost:3001/api/book",
+            import.meta.env.VITE_NODE_ENV === "production"
+            ? import.meta.env.VITE_API_URL + `/book`
+            : "http://localhost:3001/api/book",
             myNote,
             { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -86,7 +92,9 @@ const NotePage = () => {
 
         try {
             const response = await axios.delete(
-                `http://localhost:3001/api/book/${encodeURIComponent(
+                import.meta.env.VITE_NODE_ENV === "production"
+                ? import.meta.env.VITE_API_URL + `/book/${encodeURIComponent(myNote.title)}`
+                : `http://localhost:3001/api/book/${encodeURIComponent(
                     myNote.title
                 )}`,
                 { headers: { Authorization: `Bearer ${token}` } }

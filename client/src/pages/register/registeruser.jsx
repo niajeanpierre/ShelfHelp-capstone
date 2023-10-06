@@ -10,7 +10,9 @@ const RegisterPage = () => {
 
   const handleRegister = async () => {
     const user = await axios.post(
-      "http://localhost:3001/api/auth/signup", {
+        import.meta.env.VITE_NODE_ENV === "production"
+        ? import.meta.env.VITE_API_URL + `/auth/signup`
+        : "http://localhost:3001/api/auth/signup", {
         username: username,
         password: password
       }
