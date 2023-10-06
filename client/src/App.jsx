@@ -11,7 +11,7 @@ import TBR from "./pages/tbr/tbr";
 import Navigation from "./components/Navigation";
 import Search from "./pages/search/search";
 import "./App.css";
-import NotePage from "./pages/note/NotePage";
+import NotePage from "./pages/note/notepage";
 import LoginPage from "./pages/log-in/logInpage";
 import RegisterPage from "./pages/register/registeruser";
 import SignUpNav from "./components/SignUpNav";
