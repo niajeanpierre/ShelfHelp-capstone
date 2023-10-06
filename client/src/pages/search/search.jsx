@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import cover from "../../images/cover.png";
 import "./search.css";
 import { Form, FormControl, Button, Card, ListGroup } from "react-bootstrap";
 import axios from "axios";
-import LoadingSpinner from "../../components/loadingSpinner/loadingspinner";
+import LoadingSpinner from "../../components/loadingSpinner/LoadingSpinner";
 import BookMenu from "../../components/BookMenu";
 const Search = () => {
   const navigate = useNavigate();
