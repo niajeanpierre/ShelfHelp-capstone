@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import key from '../config/app.config'
+import key from '../../config/app.config'
 import { User } from '../models'
 
 module.exports = async (req, res, next) => {

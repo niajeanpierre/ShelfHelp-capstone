@@ -2,9 +2,9 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import { DB_URL } from "./src/config/db.config";
-import { API_URL, PORT } from "./src/config/app.config";
-import router from "./src/routes";
+import { DB_URL } from "./config/db.config";
+import { API_URL, PORT } from "./config/app.config";
+import router from "./routes";
 
 mongoose
   .connect(DB_URL)
