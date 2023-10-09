@@ -16,6 +16,7 @@ import LoginPage from "./pages/log-in/logInpage";
 import RegisterPage from "./pages/register/registeruser";
 import SignUpNav from "./components/SignUpNav";
 import BookInfo from "./pages/bookInfo/bookInfo";
+import About from "./pages/about/about";
 
 function UseLocationEffect() {
     const location = useLocation();
@@ -25,7 +26,7 @@ function UseLocationEffect() {
 function App() {
     const [LoggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState('');
-  
+
 useEffect(() => {
     const checkUserSession = () => {
         const token = localStorage.getItem("token");
@@ -64,6 +65,7 @@ useEffect(() => {
                     <Route path="/" exact element={<Landing />} />
                     <Route path="/shelf" element={<Shelf />} />
                     <Route path="/tbr" element={<TBR />} />
+                    <Route path="/about" element={<About />} />
                     <Route path="/search" element={<Search />} />
                     <Route path="/search/:query" element={<Search />} />
                     <Route path="/note/:title" element={<NotePage />} />
