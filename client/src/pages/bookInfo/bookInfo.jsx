@@ -109,7 +109,7 @@ const BookInfo = () => {
                 />
             </div>
             <form className="col-md-6 col-12 position-relative">
-                <h2 className="fst-italic">{book.title}</h2>
+                <h2 className="fst-italic mt-5">{book.title}</h2>
                 <p className="fs-4 fw-medium">by {book.author}</p>
                 <i
                     onClick={exitNote}

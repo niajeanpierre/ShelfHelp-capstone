@@ -79,6 +79,15 @@ function Navigation({ setLoggedIn }) {
                                 tbr
                             </NavLink>
                         </Nav.Item>
+                        <Nav.Item>
+                            <NavLink
+                                to="/about"
+                                activeclassname="active-nav-link"
+                                className="nav-link mx-5 fw-light fs-4"
+                            >
+                                about
+                            </NavLink>
+                        </Nav.Item>
                     </Nav>
                 </div>
 
